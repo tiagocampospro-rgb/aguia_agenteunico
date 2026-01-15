@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AG.U.IA — CRM</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">AG</div>
+      <div class="brand-text">
+        <h1>AG.U.IA</h1>
+        <p>CRM & Nutrição de Leads (piloto custo 0)</p>
+      </div>
+    </div>
+
+    <div class="status">
+      <span class="dot" id="apiDot"></span>
+      <span id="apiStatus">API: verificando…</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="grid">
+      <div class="card">
+        <h2>Criar Lead</h2>
+        <form id="leadForm" class="form">
+          <label>
+            Nome
+            <input id="nome" type="text" placeholder="Ex: Tiago Campos" required />
+          </label>
+
+          <label>
+            Canal
+            <select id="canal">
+              <option value="whatsapp" selected>WhatsApp</option>
+              <option value="instagram">Instagram</option>
+              <option value="email">Email</option>
+              <option value="outro">Outro</option>
+            </select>
+          </label>
+
+          <label>
+            Telefone (opcional)
+            <input id="telefone" type="text" placeholder="+55 11 99999-9999" />
+          </label>
+
+          <label>
+            Tags (separe por vírgula)
+            <input id="tags" type="text" placeholder="barbearia, recorrente, vip" />
+          </label>
+
+          <button class="btn primary" type="submit">Salvar lead</button>
+          <p class="hint" id="leadFormHint"></p>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Leads</h2>
+
+        <div class="row">
+          <input id="search" class="search" type="search" placeholder="Buscar por nome ou tag…" />
+          <button class="btn" id="refreshBtn" type="button">Atualizar</button>
+        </div>
+
+        <div class="list" id="leadsList"></div>
+      </div>
+
+      <div class="card">
+        <h2>Leads frios</h2>
+        <div class="row">
+          <input id="coldDays" type="number" min="1" value="30" />
+          <button class="btn" id="coldBtn" type="button">Buscar</button>
+        </div>
+        <div class="list" id="coldList"></div>
+      </div>
+
+      <div class="card">
+        <h2>Interações</h2>
+        <p class="hint">Selecione um lead para registrar interação e gerar lembrete.</p>
+
+        <div class="form">
+          <label>
+            Lead selecionado
+            <input id="selectedLead" type="text" readonly placeholder="Nenhum lead selecionado" />
+          </label>
+
+          <label>
+            Tipo
+            <select id="tipo">
+              <option value="mensagem_enviada" selected>Mensagem enviada</option>
+              <option value="resposta">Resposta</option>
+              <option value="agendamento">Agendamento</option>
+              <option value="compra">Compra</option>
+              <option value="anotacao">Anotação</option>
+            </select>
+          </label>
+
+          <label>
+            Nota
+            <input id="note" type="text" placeholder="Ex: Enviei lembrete de retorno" />
+          </label>
+
+          <div class="row">
+            <button class="btn primary" id="interBtn" type="button">Registrar</button>
+            <button class="btn" id="reminderBtn" type="button">Gerar lembrete</button>
+          </div>
+
+          <textarea id="reminderBox" rows="6" placeholder="A mensagem aparece aqui…" readonly></textarea>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>AG.U.IA • MVP</span>
+      <span class="muted">Frontend estático (HTML/CSS/JS) consumindo FastAPI</span>
+    </footer>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>
