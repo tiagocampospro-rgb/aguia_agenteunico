@@ -1,14 +1,28 @@
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
+*.pyc
 
 # Virtual env
 .venv/
-env/
 venv/
 
-# IDE
+# Env vars
+.env
+.env.*
+
+# OS / Editor
+.DS_Store
+Thumbs.db
 .vscode/
 .idea/
+
+# Logs
+*.log
+
+# Node / frontend (se tiver build depois)
+node_modules/
+dist/
+build/
