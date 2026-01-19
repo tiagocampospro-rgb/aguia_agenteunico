@@ -1,124 +1,147 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AG.U.IA — CRM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AG.U.IA — CRM MVP</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
-
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo">AG</div>
-      <div class="brand-text">
+  <div class="app">
+    <header class="topbar">
+      <div>
         <h1>AG.U.IA</h1>
-        <p>CRM & Nutrição de Leads (piloto custo 0)</p>
+        <p class="subtitle">CRM MVP — Leads, recorrência e lembretes (custo 0)</p>
       </div>
-    </div>
 
-    <div class="status">
-      <span class="dot" id="apiDot"></span>
-      <span id="apiStatus">API: verificando…</span>
-    </div>
-  </header>
+      <div class="env">
+        <label>API Base URL</label>
+        <input id="apiBase" value="http://127.0.0.1:8000" />
+        <button id="btnPing" class="btn secondary">Health</button>
+      </div>
+    </header>
 
-  <main class="container">
-    <section class="grid">
-      <div class="card">
-        <h2>Criar Lead</h2>
+    <main class="grid">
+      <section class="card">
+        <h2>Cadastrar Lead</h2>
+
         <form id="leadForm" class="form">
-          <label>
-            Nome
-            <input id="nome" type="text" placeholder="Ex: Tiago Campos" required />
-          </label>
-
-          <label>
-            Canal
-            <select id="canal">
-              <option value="whatsapp" selected>WhatsApp</option>
-              <option value="instagram">Instagram</option>
-              <option value="email">Email</option>
-              <option value="outro">Outro</option>
-            </select>
-          </label>
-
-          <label>
-            Telefone (opcional)
-            <input id="telefone" type="text" placeholder="+55 11 99999-9999" />
-          </label>
-
-          <label>
-            Tags (separe por vírgula)
-            <input id="tags" type="text" placeholder="barbearia, recorrente, vip" />
-          </label>
-
-          <button class="btn primary" type="submit">Salvar lead</button>
-          <p class="hint" id="leadFormHint"></p>
-        </form>
-      </div>
-
-      <div class="card">
-        <h2>Leads</h2>
-
-        <div class="row">
-          <input id="search" class="search" type="search" placeholder="Buscar por nome ou tag…" />
-          <button class="btn" id="refreshBtn" type="button">Atualizar</button>
-        </div>
-
-        <div class="list" id="leadsList"></div>
-      </div>
-
-      <div class="card">
-        <h2>Leads frios</h2>
-        <div class="row">
-          <input id="coldDays" type="number" min="1" value="30" />
-          <button class="btn" id="coldBtn" type="button">Buscar</button>
-        </div>
-        <div class="list" id="coldList"></div>
-      </div>
-
-      <div class="card">
-        <h2>Interações</h2>
-        <p class="hint">Selecione um lead para registrar interação e gerar lembrete.</p>
-
-        <div class="form">
-          <label>
-            Lead selecionado
-            <input id="selectedLead" type="text" readonly placeholder="Nenhum lead selecionado" />
-          </label>
-
-          <label>
-            Tipo
-            <select id="tipo">
-              <option value="mensagem_enviada" selected>Mensagem enviada</option>
-              <option value="resposta">Resposta</option>
-              <option value="agendamento">Agendamento</option>
-              <option value="compra">Compra</option>
-              <option value="anotacao">Anotação</option>
-            </select>
-          </label>
-
-          <label>
-            Nota
-            <input id="note" type="text" placeholder="Ex: Enviei lembrete de retorno" />
-          </label>
-
           <div class="row">
-            <button class="btn primary" id="interBtn" type="button">Registrar</button>
-            <button class="btn" id="reminderBtn" type="button">Gerar lembrete</button>
+            <div class="field">
+              <label>Nome</label>
+              <input id="nome" placeholder="Ex: Tiago Campos" required />
+            </div>
+            <div class="field">
+              <label>Telefone</label>
+              <input id="telefone" placeholder="+55 11 99999-9999" />
+            </div>
           </div>
 
-          <textarea id="reminderBox" rows="6" placeholder="A mensagem aparece aqui…" readonly></textarea>
-        </div>
-      </div>
-    </section>
+          <div class="row">
+            <div class="field">
+              <label>Canal</label>
+              <select id="canal">
+                <option value="whatsapp">WhatsApp</option>
+                <option value="instagram">Instagram</option>
+                <option value="email">E-mail</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Tags (separadas por vírgula)</label>
+              <input id="tags" placeholder="Ex: barbearia, recorrente" />
+            </div>
+          </div>
 
-    <footer class="footer">
-      <span>AG.U.IA • MVP</span>
-      <span class="muted">Frontend estático (HTML/CSS/JS) consumindo FastAPI</span>
+          <button class="btn primary" type="submit">Cadastrar</button>
+          <p id="formMsg" class="muted"></p>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Leads Frios</h2>
+        <div class="row">
+          <div class="field">
+            <label>Dias sem contato</label>
+            <input id="coldDays" type="number" min="1" value="30" />
+          </div>
+          <button id="btnCold" class="btn secondary">Buscar</button>
+        </div>
+        <div id="coldResult" class="box muted">Nenhuma busca ainda.</div>
+      </section>
+
+      <section class="card wide">
+        <div class="row space">
+          <div>
+            <h2>Lista de Leads</h2>
+            <p class="muted">Clique em “Lembrete” para gerar uma mensagem pronta.</p>
+          </div>
+          <div class="row">
+            <input id="search" class="search" placeholder="Pesquisar por nome, tag ou canal..." />
+            <button id="btnRefresh" class="btn secondary">Atualizar</button>
+          </div>
+        </div>
+
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Canal</th>
+                <th>Telefone</th>
+                <th>Tags</th>
+                <th>Último contato</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="leadTbody">
+              <tr><td colspan="6" class="muted">Carregue a lista para começar.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="row">
+          <div class="card mini">
+            <h3>Mensagem gerada</h3>
+            <textarea id="reminderBox" readonly placeholder="Aqui vai aparecer o lembrete..."></textarea>
+            <div class="row">
+              <button id="btnCopy" class="btn secondary">Copiar</button>
+              <span id="copyMsg" class="muted"></span>
+            </div>
+n          </div>
+
+          <div class="card mini">
+            <h3>Registrar interação (opcional)</h3>
+            <p class="muted">Use isso pra atualizar “último contato”.</p>
+            <div class="row">
+              <div class="field">
+                <label>Tipo</label>
+                <select id="interactionType">
+                  <option value="mensagem_enviada">mensagem_enviada</option>
+                  <option value="resposta">resposta</option>
+                  <option value="agendamento">agendamento</option>
+                  <option value="compra">compra</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Lead ID</label>
+                <input id="interactionLeadId" placeholder="Clique em um lead para preencher" />
+              </div>
+            </div>
+            <div class="field">
+              <label>Nota</label>
+              <input id="interactionNote" placeholder="Ex: lembrete enviado" />
+            </div>
+            <button id="btnInteraction" class="btn secondary">Registrar</button>
+            <p id="interactionMsg" class="muted"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer muted">
+      MVP — custo 0 | Frontend Vanilla JS | Backend FastAPI
     </footer>
-  </main>
+  </div>
 
   <script src="./app.js"></script>
 </body>
