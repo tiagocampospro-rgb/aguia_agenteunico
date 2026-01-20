@@ -4,29 +4,43 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AG.U.IA — CRM MVP</title>
+
+  <link rel="icon" type="image/png" href="./favicon.png">
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <div class="app">
+
+    <!-- TOPBAR -->
     <header class="topbar">
-      <div>
-        <h1>AG.U.IA</h1>
-        <p class="subtitle">CRM MVP — Leads, recorrência e lembretes (custo 0)</p>
+      <div class="brand">
+        <img src="./favicon.png" alt="AG.U.IA logo" class="logo" />
+        <div>
+          <h1>AG.U.IA</h1>
+          <p class="subtitle">CRM MVP — Leads, recorrência e lembretes (custo 0)</p>
+        </div>
       </div>
 
-      <div class="env">
-        <label>API Base URL</label>
-        <input id="apiBase" value="http://127.0.0.1:8000" />
-        <button id="btnPing" class="btn secondary">Health</button>
-      </div>
+      <div class="topActions">
+        <div class="apiBox">
+          <span class="pillLabel">API Base URL</span>
+          <input id="apiBase" value="http://127.0.0.1:8000" />
+          <button id="btnPing" class="btn ghost small">Health</button>
+        </div>
+     </div>
     </header>
 
-    <main class="grid">
-      <section class="card">
-        <h2>Cadastrar Lead</h2>
+
+    <main class="dashboard">
+
+      <!-- ROW 1 -->
+      <section class="card card--form">
+        <div class="cardHead">
+          <h2>Cadastrar Lead</h2>
+        </div>
 
         <form id="leadForm" class="form">
-          <div class="row">
+          <div class="row2">
             <div class="field">
               <label>Nome</label>
               <input id="nome" placeholder="Ex: Tiago Campos" required />
@@ -37,7 +51,7 @@
             </div>
           </div>
 
-          <div class="row">
+          <div class="row2">
             <div class="field">
               <label>Canal</label>
               <select id="canal">
@@ -52,33 +66,122 @@
             </div>
           </div>
 
-          <button class="btn primary" type="submit">Cadastrar</button>
-          <p id="formMsg" class="muted"></p>
+          <div class="rowInline">
+            <button class="btn primary" type="submit">Cadastrar</button>
+            <p id="formMsg" class="muted"></p>
+          </div>
         </form>
       </section>
 
-      <section class="card">
-        <h2>Leads Frios</h2>
-        <div class="row">
-          <div class="field">
+      <section class="card card--cold">
+        <div class="cardHead space">
+          <h2>Leads Frios</h2>
+          <div class="kpis">
+            <span class="kpi"><span class="dot blue"></span><b id="kpiTotal">0</b>&nbsp;Leads totais</span>
+            <span class="kpi"><span class="dot amber"></span><b id="kpiCold">0</b>&nbsp;Lead frio</span>
+          </div>
+        </div>
+
+        <div class="rowInline">
+          <div class="field grow">
             <label>Dias sem contato</label>
             <input id="coldDays" type="number" min="1" value="30" />
           </div>
-          <button id="btnCold" class="btn secondary">Buscar</button>
+          <button id="btnCold" class="btn ghost">Buscar</button>
         </div>
+
         <div id="coldResult" class="box muted">Nenhuma busca ainda.</div>
       </section>
 
-      <section class="card wide">
-        <div class="row space">
+      <!-- ROW 2 -->
+      <section class="card card--prio">
+        <div class="cardHead space">
+          <h2>Top Prioridades Hoje</h2>
+          <div class="tabs">
+            <button class="tab active" type="button">Urgente</button>
+            <button class="tab" type="button">Alta</button>
+            <button class="tab" type="button">Média</button>
+          </div>
+        </div>
+
+        <div class="prioGrid" id="prioGrid">
+          <!-- cards gerados via JS (ou placeholder) -->
+          <div class="prioCard">
+            <div class="prioTop">
+              <div>
+                <div class="prioName">—</div>
+                <div class="prioMeta muted">score: —</div>
+              </div>
+              <span class="scorePill">—</span>
+            </div>
+            <div class="prioList muted">Carregue leads para ver prioridades.</div>
+            <button class="btn ghost small" type="button" disabled>Gerar decisão</button>
+          </div>
+
+          <div class="prioCard">
+            <div class="prioTop">
+              <div>
+                <div class="prioName">—</div>
+                <div class="prioMeta muted">score: —</div>
+              </div>
+              <span class="scorePill">—</span>
+            </div>
+            <div class="prioList muted">Carregue leads para ver prioridades.</div>
+            <button class="btn ghost small" type="button" disabled>Gerar decisão</button>
+          </div>
+
+          <div class="prioCard">
+            <div class="prioTop">
+              <div>
+                <div class="prioName">—</div>
+                <div class="prioMeta muted">score: —</div>
+              </div>
+              <span class="scorePill">—</span>
+            </div>
+            <div class="prioList muted">Carregue leads para ver prioridades.</div>
+            <button class="btn ghost small" type="button" disabled>Gerar decisão</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card card--msg">
+        <div class="cardHead">
+          <h2>Mensagem gerada</h2>
+        </div>
+
+        <textarea id="reminderBox" readonly placeholder="Aqui vai aparecer o lembrete..."></textarea>
+
+        <div class="rowInline space">
+          <div class="chips">
+            <span class="chip">Leads totais: <b id="chipTotal">0</b></span>
+            <span class="chip">Lead frio: <b id="chipCold">0</b></span>
+          </div>
+
+          <div class="rowInline">
+            <button id="btnCopy" class="btn ghost">Copiar</button>
+            <span id="copyMsg" class="muted"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROW 3 -->
+      <section class="card card--list">
+        <div class="listHead">
           <div>
             <h2>Lista de Leads</h2>
             <p class="muted">Clique em “Lembrete” para gerar uma mensagem pronta.</p>
           </div>
-          <div class="row">
+
+          <div class="rowInline">
             <input id="search" class="search" placeholder="Pesquisar por nome, tag ou canal..." />
-            <button id="btnRefresh" class="btn secondary">Atualizar</button>
+            <button id="btnRefresh" class="btn ghost">Atualizar</button>
           </div>
+        </div>
+
+        <div class="listTabs">
+          <span class="tabPill active">Leads totais <b id="tabTotal">0</b></span>
+          <span class="tabPill">Lead frio <b id="tabCold">0</b></span>
+          <span class="tabPill">Recentemente contatados <b id="tabHot">0</b></span>
         </div>
 
         <div class="tableWrap">
@@ -99,20 +202,12 @@
           </table>
         </div>
 
-        <div class="row">
-          <div class="card mini">
-            <h3>Mensagem gerada</h3>
-            <textarea id="reminderBox" readonly placeholder="Aqui vai aparecer o lembrete..."></textarea>
-            <div class="row">
-              <button id="btnCopy" class="btn secondary">Copiar</button>
-              <span id="copyMsg" class="muted"></span>
-            </div>
-n          </div>
-
-          <div class="card mini">
+        <div class="split">
+          <div class="mini">
             <h3>Registrar interação (opcional)</h3>
             <p class="muted">Use isso pra atualizar “último contato”.</p>
-            <div class="row">
+
+            <div class="row2">
               <div class="field">
                 <label>Tipo</label>
                 <select id="interactionType">
@@ -122,20 +217,26 @@ n          </div>
                   <option value="compra">compra</option>
                 </select>
               </div>
+
               <div class="field">
                 <label>Lead ID</label>
                 <input id="interactionLeadId" placeholder="Clique em um lead para preencher" />
               </div>
             </div>
+
             <div class="field">
               <label>Nota</label>
               <input id="interactionNote" placeholder="Ex: lembrete enviado" />
             </div>
-            <button id="btnInteraction" class="btn secondary">Registrar</button>
-            <p id="interactionMsg" class="muted"></p>
+
+            <div class="rowInline">
+              <button id="btnInteraction" class="btn ghost">Registrar</button>
+              <p id="interactionMsg" class="muted"></p>
+            </div>
           </div>
         </div>
       </section>
+
     </main>
 
     <footer class="footer muted">
@@ -146,3 +247,4 @@ n          </div>
   <script src="./app.js"></script>
 </body>
 </html>
+
